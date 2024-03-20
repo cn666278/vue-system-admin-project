@@ -14,12 +14,12 @@
 </template>
 
 <script>
-import { defineComponent } from "vue-demi";
-import CommenHeader from "../components/CommonHeader.vue";
+import { defineComponent } from "vue";
+import CommonHeader from "../components/CommonHeader.vue";
 import CommonAside from "../components/CommonAside.vue";
 export default defineComponent({
     components: {
-        CommenHeader,
+        CommonHeader,
         CommonAside,
     }
 });
