@@ -1,7 +1,7 @@
 <template>
     <el-header>
         <div class="left-content">
-            <el-button size="small">
+            <el-button size="small" plain @click="handleCollapse"> 
                 <el-icon size="20">
                     <Menu />
                 </el-icon>
@@ -11,10 +11,7 @@
         <div class="right-content">
             <el-dropdown>
                 <span class="el-dropdown-link">
-                    <img class="userImg" src="../assets/images/user.png" alt="">
-                    <el-icon class="el-icon--right">
-                        <arrow-down />
-                    </el-icon>
+                    <img :src="getImageUrl('user')" alt="" class="user" />
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
@@ -27,6 +24,32 @@
     </el-header>
 
 </template>
+
+<script>
+import { defineComponent } from "vue-demi";
+import { useStore } from "vuex";
+export default defineComponent({
+  setup() {
+    let store = useStore();
+    let getImageUrl = (user) => {
+      // console.log(import.meta.url);
+      // console.log(new URL("../assets/images/user.png", import.meta.url));
+      return new URL(`../assets/images/${user}.png`, import.meta.url).href;
+    };
+    // let userImg = require("../assets/images/user.png");
+    let handleCollapse = () => {
+      // 调用vuex中的mutations
+      store.commit("updateIsCollapse");
+    };
+ 
+    return {
+      // userImg,
+      getImageUrl,
+      handleCollapse,
+    };
+  },
+});
+</script>
 
 <style lang="less" scoped>
     header {

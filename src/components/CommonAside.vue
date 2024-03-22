@@ -1,10 +1,11 @@
 <template>
-  <el-aside width="200px">
+  <el-aside :width="$store.state.isCollapse ? '180px' : '64px'">
     <el-menu
       class="el-menu-vertical-demo"
       background-color="#545c64"
       text-color="#fff"
-      :collapse="false" 
+      :collapse="!$store.state.isCollapse" 
+      :collapse-transition="false"
     >
       <el-menu-item :index="item.path" v-for="item in noChildren()" :key="item.path">
         <component class="icons" :is="item.icon"></component>

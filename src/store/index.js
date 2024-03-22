@@ -1,7 +1,9 @@
 import { createStore } from 'vuex';
-// or we can import pinia
-// import { createPinia } from 'pinia'; 
+// import { createPinia, defineStore } from 'pinia';
+// we should use pinia instead of vuex
+// https://pinia.vuejs.org/zh/introduction.html#basic-example
 
+// vuex
 export default createStore({
     state: {
         isCollapse: true,
@@ -12,3 +14,6 @@ export default createStore({
         }
     }
 });
+
+// pinia
+
