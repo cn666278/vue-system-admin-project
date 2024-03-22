@@ -6,6 +6,7 @@
                     <Menu />
                 </el-icon>
             </el-button>
+            <h3>HomePage</h3>
         </div>
         <div class="right-content">
             <el-dropdown>
@@ -33,10 +34,21 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
+        background-color: #333;
     }
     .right-content .userImg {
         width: 40px;
         height: 40px;
         border-radius: 50%;
+    }
+    .left-content {
+        display: flex;
+        align-items: center;
+        .el-button{
+            margin-right: 20px;
+        }
+        h3{
+            color: #fff;
+        }
     }
 </style>

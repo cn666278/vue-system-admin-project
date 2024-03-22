@@ -2,7 +2,7 @@
     <div class="common-layout">
         <el-container class="lay-container">
             <common-aside />
-            <el-container class="r-container">
+            <el-container class="el-container">
                 <common-header/>
                 <el-main>
                     <router-view />
@@ -24,4 +24,20 @@ export default defineComponent({
     }
 });
 </script>
+
+<style lang="less" scoped>
+.el-container {
+    flex-wrap: wrap; // 使得footer能够在最下面
+}
+.common-layout {
+    height: 100%;
+    & > .el-container { 
+        height: 100%;
+        & > .el-aside {
+            height: 100%;
+            background: #545c64;
+        }
+    }
+}
+</style>
 
