@@ -4,14 +4,25 @@
       class="el-menu-vertical-demo"
       background-color="#545c64"
       text-color="#fff"
-      :collapse="!$store.state.isCollapse" 
+      :collapse="!$store.state.isCollapse"
       :collapse-transition="false"
     >
-      <el-menu-item :index="item.path" v-for="item in noChildren()" :key="item.path">
+      <h3 v-show="$store.state.isCollapse">Admin Management</h3>
+      <h3 v-show="!$store.state.isCollapse">Admin</h3>
+      <el-menu-item
+        :index="item.path"
+        v-for="item in noChildren()"
+        :key="item.path"
+        @click="clickMenu(item)"
+      >
         <component class="icons" :is="item.icon"></component>
         <span>{{ item.label }}</span>
       </el-menu-item>
-      <el-sub-menu :index="item.label" v-for="item in hasChildren()" :key="item.path">
+      <el-sub-menu
+        :index="item.label"
+        v-for="item in hasChildren()"
+        :key="item.path"
+      >
         <template #title>
           <component class="icons" :is="item.icon"></component>
           <span>{{ item.label }}</span>
@@ -21,6 +32,7 @@
             :index="subItem.path"
             v-for="(subItem, subIndex) in item.children"
             :key="subIndex"
+            @click="clickMenu(subItem)"
           >
             <component class="icons" :is="subItem.icon"></component>
             <span>{{ subItem.label }}</span>
@@ -32,6 +44,7 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
 export default {
   setup() {
     const list = [
@@ -40,7 +53,7 @@ export default {
         name: "user",
         label: "UserManage",
         icon: "user",
-        url: "UserManage/UserManage"
+        url: "UserManage/UserManage",
       },
       {
         label: "Other",
@@ -52,36 +65,45 @@ export default {
             name: "page1",
             label: "Page1",
             icon: "setting",
-            url: "Other/PageOne"
+            url: "Other/PageOne",
           },
           {
             path: "/page2",
             name: "page2",
             label: "Page2",
             icon: "setting",
-            url: "Other/PageTwo"
-          }
-        ]
-      }
+            url: "Other/PageTwo",
+          },
+        ],
+      },
     ];
 
+    const router = useRouter();
+
     const noChildren = () => {
-      return list.filter(item => {
+      return list.filter((item) => {
         return !item.children;
       });
     };
 
     const hasChildren = () => {
-      return list.filter(item => {
+      return list.filter((item) => {
         return item.children;
       });
     };
 
+    const clickMenu = (item) => {
+      router.push({
+        name: item.name,
+      })
+    };
+
     return {
       noChildren,
-      hasChildren
+      hasChildren,
+      clickMenu,
     };
-  }
+  },
 };
 </script>
 
@@ -90,7 +112,12 @@ export default {
   width: 18px;
   height: 18px;
 }
-.el-menu{
+.el-menu {
   border-right: none; // delete the default border
+  h3 {
+    line-height: 48px;
+    color: #fff;
+    text-align: center;
+  }
 }
 </style>
