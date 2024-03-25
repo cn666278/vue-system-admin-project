@@ -30,48 +30,13 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
+import axios from "axios";
 
 export default defineComponent({
   setup() {
-    const tableData = [
-      {
-        name: "oppo",
-        todayPurchase: 500,
-        monthlyPurchase: 3500,
-        totalPurchase: 22000,
-      },
-      {
-        name: "vivo",
-        todayPurchase: 300,
-        monthlyPurchase: 2200,
-        totalPurchase: 24000,
-      },
-      {
-        name: "apple",
-        todayPurchase: 800,
-        monthlyPurchase: 4500,
-        totalPurchase: 65000,
-      },
-      {
-        name: "xiaomi",
-        todayPurchase: 1200,
-        monthlyPurchase: 6500,
-        totalPurchase: 45000,
-      },
-      {
-        name: "samsung",
-        todayPurchase: 300,
-        monthlyPurchase: 2000,
-        totalPurchase: 34000,
-      },
-      {
-        name: "hauwei",
-        todayPurchase: 1050,
-        monthlyPurchase: 8000,
-        totalPurchase: 102000,
-      },
-    ];
+    // tableData使用let定义，因为后续会对其进行赋值, tableData is defined using let because it will be assigned later
+    let tableData = ref([]); // 双向绑定，使用ref包裹数组，实现响应式数据, Two-way binding, use ref to wrap the array to achieve responsive data
     // 今日购买，本月购买，总购买 Today's purchases, Monthly purchases, Total purchases
     const tableLable = {
       name: "Brand",
@@ -79,6 +44,16 @@ export default defineComponent({
       monthlyPurchase: "Monthly purchases",
       totalPurchase: "Total purchases",
     };
+    const getTableList = async () => {
+        // 异步请求数据，这里使用axios模拟请求
+      await axios.get("/home/getData").then((res) => {
+        console.log(res);
+        tableData.value = res.data.data.tableData; // ? 如何优化？ 解构？ 
+      });
+    };
+    onMounted(() => {
+      getTableList();
+    });
     return {
       tableData,
       tableLable,
