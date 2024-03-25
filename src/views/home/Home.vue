@@ -45,11 +45,23 @@ export default defineComponent({
       totalPurchase: "Total purchases",
     };
     const getTableList = async () => {
-        // 异步请求数据，这里使用axios模拟请求
-      await axios.get("/home/getData").then((res) => {
-        console.log(res);
-        tableData.value = res.data.data.tableData; // ? 如何优化？ 解构？ 
-      });
+      // 异步请求数据，这里使用axios模拟请求
+      //   await axios.get("/home/getData").then((res) => {
+      //     console.log(res);
+      //     tableData.value = res.data.data; // ? 如何优化？ 解构？
+      //   });
+
+      // 使用api-fox模拟请求数据
+      await axios
+        .get(
+          "https://mock.apifox.com/m1/4216854-0-default/api/home/getTableData"
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data.code === 200) {
+            tableData.value = res.data.data;
+          }
+        });
     };
     onMounted(() => {
       getTableList();
