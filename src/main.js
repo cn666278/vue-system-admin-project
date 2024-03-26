@@ -8,6 +8,7 @@ import store from './store'
 
 
 import './api/mock.js'
+import api from './api/api'
 
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -17,5 +18,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // import 'element-plus/dist/index.css'
 // 完整引入ElementPlus, 优点是不用一个一个引入组件，缺点是打包后的文件会变大
 // app.use(ElementPlus)
+app.config.globalProperties.$api = api;
 app.use(router).use(store)
 app.mount('#app')

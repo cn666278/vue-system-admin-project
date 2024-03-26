@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, getCurrentInstance } from "vue";
 import axios from "axios";
 
 export default defineComponent({
@@ -44,24 +44,25 @@ export default defineComponent({
       monthlyPurchase: "Monthly purchases",
       totalPurchase: "Total purchases",
     };
-    const getTableList = async () => {
-      // 异步请求数据，这里使用axios模拟请求
-      //   await axios.get("/home/getData").then((res) => {
-      //     console.log(res);
-      //     tableData.value = res.data.data; // ? 如何优化？ 解构？
-      //   });
 
+    // proxy是vue3.0提供的一个全局对象，可以通过getCurrentInstance()获取到当前实例，
+    // 再通过proxy.$api获取到api-fox模拟的接口数据
+    const { proxy } = getCurrentInstance(); 
+    const getTableList = async () => {
       // 使用api-fox模拟请求数据
-      await axios
-        .get(
-          "https://mock.apifox.com/m1/4216854-0-default/api/home/getTableData"
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.code === 200) {
-            tableData.value = res.data.data;
-          }
-        });
+      //   await axios
+      //     .get(
+      //       "https://mock.apifox.com/m1/4216854-0-default/api/home/getTableData"
+      //     )
+      //     .then((res) => {
+      //       console.log(res);
+      //       if (res.data.code === 200) {
+      //         tableData.value = res.data.data;
+      //       }
+      //     });
+      let res = await proxy.$api.getTableData();
+    //   console.log(res);
+      tableData.value = res;
     };
     onMounted(() => {
       getTableList();
