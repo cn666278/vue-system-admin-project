@@ -25,7 +25,25 @@
         </el-table>
       </el-card>
     </el-col>
-    <el-col :span="15" style="margin-top: 20px"> </el-col>
+    <el-col :span="15" style="margin-top: 20px">
+      <div class="num">
+        <el-card
+          :body-style="{ display: 'flex', padding: 0 }"
+          v-for="item in countData"
+          :key="item.name"
+        >
+          <component
+            class="icons"
+            :is="item.icon"
+            :style="{ background: item.color }"
+          ></component>
+          <div class="details">
+            <p class="num">&pound; {{ item.value }}</p>
+            <p class="text">{{ item.name }}</p>
+          </div>
+        </el-card>
+      </div>
+    </el-col>
   </el-row>
 </template>
 
@@ -37,6 +55,7 @@ export default defineComponent({
   setup() {
     // tableData使用let定义，因为后续会对其进行赋值, tableData is defined using let because it will be assigned later
     let tableData = ref([]); // 双向绑定，使用ref包裹数组，实现响应式数据, Two-way binding, use ref to wrap the array to achieve responsive data
+    let countData = ref({});
     // 今日购买，本月购买，总购买 Today's purchases, Monthly purchases, Total purchases
     const tableLable = {
       name: "Brand",
@@ -47,7 +66,7 @@ export default defineComponent({
 
     // proxy是vue3.0提供的一个全局对象，可以通过getCurrentInstance()获取到当前实例，
     // 再通过proxy.$api获取到api-fox模拟的接口数据
-    const { proxy } = getCurrentInstance(); 
+    const { proxy } = getCurrentInstance();
     const getTableList = async () => {
       // 使用api-fox模拟请求数据
       //   await axios
@@ -61,15 +80,22 @@ export default defineComponent({
       //       }
       //     });
       let res = await proxy.$api.getTableData();
-    //   console.log(res);
+      //   console.log(res);
       tableData.value = res;
+    };
+    // 获取首页count统计数据
+    const getCountData = async () => {
+      let res = await proxy.$api.getCountData();
+      countData.value = res;
     };
     onMounted(() => {
       getTableList();
+      getCountData();
     });
     return {
       tableData,
       tableLable,
+      countData,
     };
   },
 });
@@ -98,6 +124,38 @@ export default defineComponent({
       span {
         color: #666;
         margin-left: 60px;
+      }
+    }
+  }
+  .num {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .el-card{
+      width: 32%;
+      margin-bottom: 20px;
+    }
+    .icons {
+      width: 80px;
+      height: 80px;
+      font-size: 30px;
+      text-align: center;
+      line-height: 80px;
+      color: #fff;
+    }
+    .details {
+      margin-left: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .num {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+      .text {
+        font-size: 13px;
+        // text-align: center;
+        color: #999; 
       }
     }
   }

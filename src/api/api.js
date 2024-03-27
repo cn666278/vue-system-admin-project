@@ -12,4 +12,11 @@ export default {
       mock: true, // 是否使用mock数据
     });
   },
+  getCountData(){
+    return request({
+      url: "/home/getCountData",
+      method: "get",
+      mock: true,
+    });
+  }
 };
