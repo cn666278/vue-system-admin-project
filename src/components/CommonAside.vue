@@ -45,8 +45,10 @@
 
 <script>
 import { useRouter } from "vue-router";
+import { useStore } from 'vuex';
 export default {
   setup() {
+    const store = useStore();
     const list = [
       {
         path: "/user",
@@ -95,7 +97,9 @@ export default {
     const clickMenu = (item) => {
       router.push({
         name: item.name,
-      })
+      });
+      // vuex来管理当前选中的菜单
+      store.commit("selectMenu", item);
     };
 
     return {
