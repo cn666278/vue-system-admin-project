@@ -46,6 +46,14 @@
       <el-card style="height: 280px">
         <div ref="echart" style="height: 280px"></div>
       </el-card>
+      <div class="graph">
+        <el-card style="height: 260px;">
+          <div ref="userEchart" style="height: 240px;"></div>
+        </el-card>
+        <el-card style="height: 260px;">
+          <div ref="videoEchart" style="height: 240px;"></div>
+        </el-card>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -156,7 +164,7 @@ export default defineComponent({
       xData: [],
       series: [],
     });
-    let userDate = reactive({
+    let userData = reactive({
       xData: [],
       series: [],
     });
@@ -185,9 +193,28 @@ export default defineComponent({
       orderData.series = series;
       xOptions.xAxis.data = orderData.xData;
       xOptions.series = orderData.series;
-      // 渲染echarts
-      let hEcharts = echarts.init(proxy.$refs['echart']); // 获取dom节点
+      // 渲染echarts: orderData
+      let hEcharts = echarts.init(proxy.$refs['echart']); // 获取dom节点 ref="echart"
       hEcharts.setOption(xOptions);
+
+      // 渲染柱状图: userData
+      userData.xData = userRes.map((item) => item.date);
+      userData.series = [
+        {
+          name: "New users",
+          data: userRes.map((item) => item.new),
+          type: "bar",
+        },
+        {
+          name: "Active users",
+          data: userRes.map((item) => item.active),
+          type: "bar",
+        },
+      ];
+      xOptions.xAxis.data = userData.xData;
+      xOptions.series = userData.series;
+      let userEcharts = echarts.init(proxy.$refs['userEchart']); // 获取dom节点 ref="userEchart" 
+      userEcharts.setOption(xOptions);
     };
 
     onMounted(() => {
