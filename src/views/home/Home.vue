@@ -160,6 +160,7 @@ export default defineComponent({
       ],
       series: [],
     });
+    // 定义响应式数据 !!
     let orderData = reactive({
       xData: [],
       series: [],
@@ -176,10 +177,10 @@ export default defineComponent({
     const getEchartData = async () => {
       let result = await proxy.$api.getEchartData();
       // console.log(result);
-      let { orderData, userData, videoData } = result;
-      let res = orderData;
-      let userRes = userData;
-      let videoRes = videoData;
+      // let { orderData, userData, videoData } = result; // 解构赋值后不具有响应式，因为result是一个普通对象 
+      let res = result.orderData;
+      let userRes = result.userData;
+      let videoRes = result.videoData;
       orderData.xData = res.date;
       const keyArray = Object.keys(res.data[0]);
       const series = []
@@ -215,6 +216,17 @@ export default defineComponent({
       xOptions.series = userData.series;
       let userEcharts = echarts.init(proxy.$refs['userEchart']); // 获取dom节点 ref="userEchart" 
       userEcharts.setOption(xOptions);
+
+      // 渲染饼图: videoData
+      videoData.series = [
+        {
+          data: videoRes,
+          type: "pie",
+        }
+      ];
+      pieOptions.series = videoData.series;
+      let videoEcharts = echarts.init(proxy.$refs['videoEchart']); // 获取dom节点 ref="videoEchart"
+      videoEcharts.setOption(pieOptions);
     };
 
     onMounted(() => {
