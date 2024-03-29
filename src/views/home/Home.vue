@@ -301,6 +301,14 @@ export default defineComponent({
       }
     }
   }
+  .graph {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    .el-card {
+      width: 48%;
+    }
+  }
 }
 
 .el-table .cell {
