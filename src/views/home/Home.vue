@@ -43,13 +43,23 @@
           </div>
         </el-card>
       </div>
+      <el-card style="height: 280px">
+        <div ref="echart" style="height: 280px"></div>
+      </el-card>
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, getCurrentInstance } from "vue";
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  getCurrentInstance,
+  reactive,
+} from "vue";
 import axios from "axios";
+import * as echarts from "echarts";
 
 export default defineComponent({
   setup() {
@@ -88,9 +98,102 @@ export default defineComponent({
       let res = await proxy.$api.getCountData();
       countData.value = res;
     };
+    // 关于echarts的渲染部分，可以参考echarts官网的文档
+    let xOptions = reactive({
+      // 图例文字颜色
+      textStyle: {
+        color: "#333",
+      },
+      grid: {
+        left: "20%",
+      },
+      // 提示框
+      tooltip: {
+        trigger: "axis",
+      },
+      xAxis: {
+        type: "category", // 类目轴
+        data: [],
+        axisLine: {
+          lineStyle: {
+            color: "#17b3a3",
+          },
+        },
+        axisLabel: {
+          interval: 0,
+          color: "#333",
+        },
+      },
+      yAxis: [
+        {
+          type: "value",
+          axisLine: {
+            lineStyle: {
+              color: "#17b3a3",
+            },
+          },
+        },
+      ],
+      color: ["#2ec7c9", "#b6a2de", "#5ab1ef", "#ffb980", "#d87a80", "#8d98b3"],
+      series: [],
+    });
+    let pieOptions = reactive({
+      tooltip: {
+        trigger: "item",
+      },
+      color: [
+        "#0f78f4",
+        "#dd536b",
+        "#9462e5",
+        "#a6a6a6",
+        "#e1bb22",
+        "#39c362",
+        "#3ed1cf",
+      ],
+      series: [],
+    });
+    let orderData = reactive({
+      xData: [],
+      series: [],
+    });
+    let userDate = reactive({
+      xData: [],
+      series: [],
+    });
+    let videoData = reactive({
+      series: [],
+    });
+
+    // 获取echarts数据
+    const getEchartData = async () => {
+      let result = await proxy.$api.getEchartData();
+      // console.log(result);
+      let { orderData, userData, videoData } = result;
+      let res = orderData;
+      let userRes = userData;
+      let videoRes = videoData;
+      orderData.xData = res.date;
+      const keyArray = Object.keys(res.data[0]);
+      const series = []
+      keyArray.forEach((key) => {
+        series.push({
+          name: key,
+          data: res.data.map((item) => item[key]),
+          type: "line",
+        });
+      });
+      orderData.series = series;
+      xOptions.xAxis.data = orderData.xData;
+      xOptions.series = orderData.series;
+      // 渲染echarts
+      let hEcharts = echarts.init(proxy.$refs['echart']); // 获取dom节点
+      hEcharts.setOption(xOptions);
+    };
+
     onMounted(() => {
       getTableList();
       getCountData();
+      getEchartData();
     });
     return {
       tableData,
@@ -131,7 +234,7 @@ export default defineComponent({
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    .el-card{
+    .el-card {
       width: 32%;
       margin-bottom: 20px;
     }
@@ -155,7 +258,7 @@ export default defineComponent({
       .text {
         font-size: 13px;
         // text-align: center;
-        color: #999; 
+        color: #999;
       }
     }
   }

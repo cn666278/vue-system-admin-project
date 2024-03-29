@@ -18,5 +18,12 @@ export default {
       method: "get",
       mock: true,
     });
+  },
+  getEchartData() {
+    return request({
+      url: "/home/getEchartData",
+      method: "get",
+      mock: true,
+    });
   }
 };
