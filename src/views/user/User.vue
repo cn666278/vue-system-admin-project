@@ -18,6 +18,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      small
+      background
+      layout="prev, pager, next"
+      :total="config.total"
+      @current-change="changePage"
+      class="mt-4"
+    />
   </div>
 </template>
 
@@ -58,19 +66,30 @@ export default defineComponent({
       },
     ]);
     onMounted(() => {
-      getUserData();
+      getUserData(config);
     });
-    const getUserData = async () => {
-      let res = await proxy.$api.getUserData();
+    const config = reactive({
+      total: 0,
+      page: 1,
+    });
+    const getUserData = async (config) => {
+      let res = await proxy.$api.getUserData(config);
       //   console.log(res);
+      config.total = res.count;
       list.value = res.list.map((item) => {
         item.sexLabel = item.sex === 0 ? "Female" : "Male";
         return item;
       });
     };
+    const changePage = (page) => {
+      config.page = page;
+      getUserData(config); // Call the API again, and the data will be updated
+    };
     return {
       list,
       tableLabel,
+      config,
+      changePage,
     };
   },
 });
