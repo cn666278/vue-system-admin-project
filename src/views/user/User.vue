@@ -24,7 +24,7 @@
       layout="prev, pager, next"
       :total="config.total"
       @current-change="changePage"
-      class="mt-4"
+      class="pager mt-4"
     />
   </div>
 </template>
@@ -94,3 +94,15 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="less" scoped>
+.table {
+  position: relative;
+  height: 520px;
+  .pager{
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+  }
+}
+</style>

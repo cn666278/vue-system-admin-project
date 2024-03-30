@@ -2,13 +2,13 @@
   <div class="common-layout">
     <el-container class="lay-container">
       <common-aside />
-      <el-container class="el-container">
+      <el-container>
         <common-header />
         <common-tab />
-        <el-main>
+        <el-main class="right-main">
           <router-view />
         </el-main>
-        <el-footer class="el-footer">Footer</el-footer>
+        <!-- <el-footer class="el-footer">Footer</el-footer> -->
       </el-container>
     </el-container>
   </div>
@@ -29,9 +29,17 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+.el-container {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  height: 100%;
+}
 .common-layout {
   .lay-container {
     flex-wrap: nowrap; // 不换行
+    .right-main {
+      height: calc(100% - 124px) !important; // 124 = 64 + 40 + 20, 64是header的高度，40是tab的高度，20是底部空间的高度
+    }
   }
   height: 100%;
   & > .el-container {
