@@ -53,11 +53,12 @@ export default {
 
 <style lang="less" scoped>
 .tags {
-  padding: 20px;
+  padding: 20px 20px 0 20px;
   width: 100%;
   .el-tag {
     margin-right: 15px;
     cursor: pointer;
+    padding: 15px;
   }
 }
 </style>

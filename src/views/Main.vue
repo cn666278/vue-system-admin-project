@@ -8,7 +8,7 @@
         <el-main>
           <router-view />
         </el-main>
-        <el-footer>Footer</el-footer>
+        <el-footer class="el-footer">Footer</el-footer>
       </el-container>
     </el-container>
   </div>
@@ -40,6 +40,9 @@ export default defineComponent({
       height: 100%;
       background: #545c64;
     }
+  }
+  .el-footer {
+    height: 30px;
   }
 }
 </style>
