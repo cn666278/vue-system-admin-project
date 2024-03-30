@@ -9,7 +9,7 @@ export default {
       url: "/home/getTableData",
       method: "get",
       data: params,
-      mock: true, // 是否使用mock数据
+      mock: true, // 是否使用mock数据, true则使用apifox数据，false则使用本地数据
     });
   },
   getCountData(){
@@ -24,6 +24,14 @@ export default {
       url: "/home/getEchartData",
       method: "get",
       mock: true,
+    });
+  },
+  getUserData(params) {
+    return request({
+      url: "/user/getUser",
+      method: "get",
+      data: params,
+      mock: false, // 本地获取数据，不使用mock(apifox)数据
     });
   }
 };
