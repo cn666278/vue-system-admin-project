@@ -1,7 +1,7 @@
 <!-- https://element-plus.org/en-US/component/table.html#table-with-fixed-column -->
 <template>
   <div class="user-header">
-    <el-button type="primary">+Add</el-button>
+    <el-button type="primary" @click="dialogVisible = true">+Add</el-button>
     <el-form :inline="true" :model="formInline">
       <el-form-item label="Please enter">
         <el-input
@@ -42,6 +42,79 @@
       class="pager mt-4"
     />
   </div>
+  <el-dialog
+    v-model="dialogVisible"
+    title="Add User"
+    width="40%"
+    :before-close="handleClose"
+  >
+    <el-form :inline="true" :model="formUser" style="margin-top: 10px;" label-width="auto" label-position="right" >
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="Name">
+            <el-input
+              v-model="formUser.name"
+              placeholder="Please enter user name"
+              clearable
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Age">
+            <el-input
+              v-model="formUser.age"
+              placeholder="Please enter age"
+              clearable
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="Gender" style="display: flex">
+            <el-select v-model="formUser.sex" placeholder="Please select">
+              <el-option label="Male" value="0" />
+              <el-option label="Female" value="1" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Date of Birth">
+            <el-date-picker
+              v-model="formUser.birth"
+              type="date"
+              label="Date of Birth"
+              placeholder="Pick a date"
+              style="width: 100%"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-form-item label="Address">
+        <el-input
+          v-model="formUser.addr"
+          placeholder="Please enter the address"
+          clearable
+        />
+      </el-form-item>
+      </el-row>
+      <el-row style="justify-content: flex-end; margin-top: 10px;" >
+        <el-form-item>
+        <el-button type="primary" @click="onSubmit">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">Confirm</el-button>
+      </el-form-item>
+      </el-row>
+    </el-form>
+    <!-- <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogVisible = false">
+          Confirm
+        </el-button>
+      </div>
+    </template> -->
+  </el-dialog>
 </template>
 
 <script>
@@ -105,11 +178,29 @@ export default defineComponent({
     };
     const formInline = reactive({
       keyword: "",
+      age: "",
+      sex: "",
     });
-    const handleSearch = () => { 
-      config.name = formInline.keyword; 
+    const handleSearch = () => {
+      config.name = formInline.keyword;
       getUserData(config); // Call the API again, and the data will be updated
     };
+    // Dialog, 控制模态框的显示隐藏
+    const dialogVisible = ref(false);
+    const handleClose = (done) => {
+      ElMessageBox.confirm("Are you sure to close this dialog?")
+        .then(() => {
+          done();
+        })
+        .catch(() => {
+          // catch error
+        });
+    };
+    // 添加用户的表单数据
+    const formUser = reactive({
+      name: "", // 用户名
+      age: "", // 年龄
+    });
     return {
       list,
       tableLabel,
@@ -117,6 +208,9 @@ export default defineComponent({
       changePage,
       formInline,
       handleSearch,
+      dialogVisible,
+      handleClose,
+      formUser,
     };
   },
 });
