@@ -48,10 +48,17 @@
     width="40%"
     :before-close="handleClose"
   >
-    <el-form :inline="true" :model="formUser" style="margin-top: 10px;" label-width="auto" label-position="right" >
+    <el-form
+      :inline="true"
+      :model="formUser"
+      style="margin-top: 10px"
+      label-width="auto"
+      label-position="right"
+      ref="userForm"
+    >
       <el-row>
         <el-col :span="12">
-          <el-form-item label="Name">
+          <el-form-item label="Name" prop="name">
             <el-input
               v-model="formUser.name"
               placeholder="Please enter user name"
@@ -60,7 +67,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Age">
+          <el-form-item label="Age" prop="age">
             <el-input
               v-model="formUser.age"
               placeholder="Please enter age"
@@ -71,7 +78,7 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="Gender" style="display: flex">
+          <el-form-item label="Gender" style="display: flex" prop="sex">
             <el-select v-model="formUser.sex" placeholder="Please select">
               <el-option label="Male" value="0" />
               <el-option label="Female" value="1" />
@@ -79,7 +86,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Date of Birth">
+          <el-form-item label="Date of Birth" prop="birth">
             <el-date-picker
               v-model="formUser.birth"
               type="date"
@@ -91,19 +98,19 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-form-item label="Address">
-        <el-input
-          v-model="formUser.addr"
-          placeholder="Please enter the address"
-          clearable
-        />
-      </el-form-item>
+        <el-form-item label="Address" prop="addr">
+          <el-input
+            v-model="formUser.addr"
+            placeholder="Please enter the address"
+            clearable
+          />
+        </el-form-item>
       </el-row>
-      <el-row style="justify-content: flex-end; margin-top: 10px;" >
+      <el-row style="justify-content: flex-end; margin-top: 10px">
         <el-form-item>
-        <el-button type="primary" @click="onSubmit">Cancel</el-button>
-        <el-button type="primary" @click="onSubmit">Confirm</el-button>
-      </el-form-item>
+          <el-button type="primary" @click="onSubmit">Cancel</el-button>
+          <el-button type="primary" @click="onSubmit">Confirm</el-button>
+        </el-form-item>
       </el-row>
     </el-form>
     <!-- <template #footer>
@@ -128,7 +135,7 @@ import {
 
 export default defineComponent({
   setup() {
-    const { proxy } = getCurrentInstance();
+    const { proxy } = getCurrentInstance(); // Get the instance object
     const list = ref([]);
     const tableLabel = reactive([
       {
@@ -200,7 +207,36 @@ export default defineComponent({
     const formUser = reactive({
       name: "", // 用户名
       age: "", // 年龄
+      sex: "", // 性别
+      birth: "", // 出生日期
+      addr: "", // 地址
     });
+    // 时间格式化
+    // 也可以使用element-plus的日期格式化: value-format="YYYY-MM-DD"
+    // https://element-plus.org/en-US/component/date-picker.html#date-format
+    // 这里使用原生的
+    const timeFormat = (time) => {
+      var time = new Date(time);
+      var year = time.getFullYear();
+      var month = time.getMonth() + 1; // 月份是从0开始的
+      var date = time.getDate(); // 获取日: 1-31
+      function addZero(num) {
+        return num < 10 ? "0" + num : num; // 如果小于10,在前面加0
+      }
+      return year + "-" + addZero(month) + "-" + addZero(date); // 返回格式化的日期: YYYY-MM-DD
+    }
+    // 添加用户
+    const onSubmit = async () => {
+      formUser.birth = timeFormat(formUser.birth); // 格式化日期
+      let res = await proxy.$api.addUser(formUser);
+      // console.log(res);
+      if (res) {
+        // console.log(proxy)
+        dialogVisible.value = false; 
+        proxy.$refs.userForm.resetFields(); // 重置表单
+        getUserData(config); // 更新数据
+      }
+    };
     return {
       list,
       tableLabel,
@@ -211,6 +247,7 @@ export default defineComponent({
       dialogVisible,
       handleClose,
       formUser,
+      onSubmit,
     };
   },
 });

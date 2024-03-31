@@ -33,5 +33,13 @@ export default {
       data: params, // data: {total: 0, page: 1}
       mock: false, // 本地获取数据，不使用mock(apifox)数据
     });
+  },
+  addUser(params){
+    return request({
+      url: "/user/add",
+      method: "post",
+      data: params,
+      mock: false,
+    });
   }
 };
