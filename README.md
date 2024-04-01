@@ -1,7 +1,11 @@
 # Vue 3 + Vite
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+项目简介：Vue后台管理系统
+- 项目简介：一个后台前端解决方案,使用了许多最新的前端技术栈、动态路由，权限验证，并且有着丰富的组件和功能。
+-	主要技术栈： Vue3、Vite、JavaScript、Vuex(考虑替换为Pinia)、Element Plus、Axios、Vue Router
+-	主要工作：
+  1.  项目使用Vite脚手架搭建，配合使用Element Plus，使用vite自动生成路由，优化路由
+  2.	实现用户表单中的新增，编辑和删除功能，日期格式化以及表单验证。
+  3.	ApiFox 手写api接口，并配合mock.js进行数据模拟
+  4.	使用Echarts绘制数据图（线图，饼图，柱状图）
+  5.	导航栏面包屑实现，使用Vuex实现跨组件通信，:deep() !important 实现样式穿透, tab标签路由实现
