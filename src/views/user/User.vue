@@ -58,7 +58,11 @@
     >
       <el-row>
         <el-col :span="12">
-          <el-form-item label="Name" prop="name">
+          <el-form-item
+            label="Name"
+            prop="name"
+            :rules="[{ required: true, message: 'Name is required' }]"
+          >
             <el-input
               v-model="formUser.name"
               placeholder="Please enter user name"
@@ -67,9 +71,16 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Age" prop="age">
+          <el-form-item
+            label="Age"
+            prop="age"
+            :rules="[
+              { required: true, message: 'Age is required' },
+              { type: 'number', message: 'Age must be a number' },
+            ]"
+          >
             <el-input
-              v-model="formUser.age"
+              v-model.number="formUser.age"
               placeholder="Please enter age"
               clearable
             />
@@ -78,7 +89,12 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="Gender" style="display: flex" prop="sex">
+          <el-form-item
+            label="Gender"
+            style="display: flex"
+            prop="sex"
+            :rules="[{ required: true, message: 'Gender is required' }]"
+          >
             <el-select v-model="formUser.sex" placeholder="Please select">
               <el-option label="Male" value="0" />
               <el-option label="Female" value="1" />
@@ -86,7 +102,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Date of Birth" prop="birth">
+          <el-form-item
+            label="Date of Birth"
+            prop="birth"
+            :rules="[{ required: true, message: 'Date of Birth is required' }]"
+          >
             <el-date-picker
               v-model="formUser.birth"
               type="date"
@@ -98,7 +118,11 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-form-item label="Address" prop="addr">
+        <el-form-item
+          label="Address"
+          prop="addr"
+          :rules="[{ required: true, message: 'Address is required' }]"
+        >
           <el-input
             v-model="formUser.addr"
             placeholder="Please enter the address"
@@ -108,7 +132,7 @@
       </el-row>
       <el-row style="justify-content: flex-end; margin-top: 10px">
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">Cancel</el-button>
+          <el-button type="primary" @click="handelCancel">Cancel</el-button>
           <el-button type="primary" @click="onSubmit">Confirm</el-button>
         </el-form-item>
       </el-row>
@@ -197,7 +221,8 @@ export default defineComponent({
     const handleClose = (done) => {
       ElMessageBox.confirm("Are you sure to close this dialog?")
         .then(() => {
-          done();
+          proxy.$refs.userForm.resetFields(); // Reset the form
+          done(); // Close the dialog
         })
         .catch(() => {
           // catch error
@@ -224,18 +249,30 @@ export default defineComponent({
         return num < 10 ? "0" + num : num; // 如果小于10,在前面加0
       }
       return year + "-" + addZero(month) + "-" + addZero(date); // 返回格式化的日期: YYYY-MM-DD
-    }
+    };
     // 添加用户
-    const onSubmit = async () => {
-      formUser.birth = timeFormat(formUser.birth); // 格式化日期
-      let res = await proxy.$api.addUser(formUser);
-      // console.log(res);
-      if (res) {
-        // console.log(proxy)
-        dialogVisible.value = false; 
-        proxy.$refs.userForm.resetFields(); // 重置表单
-        getUserData(config); // 更新数据
-      }
+    const onSubmit = () => {
+      // 验证
+      // 验证有两种写法，在el-form-item上写rules，或者统一管理rules
+      // 参照: https://element-plus.org/en-US/component/form.html#form-validation
+      proxy.$refs.userForm.validate(async (valid) => {
+        if (valid) {
+          formUser.birth = timeFormat(formUser.birth); // 格式化日期
+          let res = await proxy.$api.addUser(formUser);
+          // console.log(res);
+          if (res) {
+            // console.log(proxy)
+            dialogVisible.value = false;
+            proxy.$refs.userForm.resetFields(); // 重置表单
+            getUserData(config); // 更新数据
+          }
+        }
+      });
+    };
+    // 取消添加用户,并重置表单
+    const handelCancel = () => {
+      dialogVisible.value = false;
+      proxy.$refs.userForm.resetFields(); // 重置表单
     };
     return {
       list,
@@ -248,6 +285,7 @@ export default defineComponent({
       handleClose,
       formUser,
       onSubmit,
+      handelCancel,
     };
   },
 });
@@ -264,6 +302,7 @@ export default defineComponent({
     right: 0;
   }
 }
+
 .user-header {
   display: flex;
   justify-content: space-between;
