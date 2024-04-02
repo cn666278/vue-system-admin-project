@@ -1,7 +1,7 @@
 <!-- https://element-plus.org/en-US/component/table.html#table-with-fixed-column -->
 <template>
   <div class="user-header">
-    <el-button type="primary" @click="dialogVisible = true">+Add</el-button>
+    <el-button type="primary" @click="handleAdd()">+Add</el-button>
     <el-form :inline="true" :model="formInline">
       <el-form-item label="Please enter">
         <el-input
@@ -25,8 +25,8 @@
         :width="item.width ? item.width : 125"
       />
       <el-table-column fixed="right" label="Operations" min-width="180">
-        <template #default>
-          <el-button type="primary" size="small" @click="handleClick"
+        <template #default="scope">
+          <el-button type="primary" size="small" @click="handleEdit(scope.row)"
             >Edit</el-button
           >
           <el-button type="danger" size="small">Delete</el-button>
@@ -44,7 +44,7 @@
   </div>
   <el-dialog
     v-model="dialogVisible"
-    title="Add User"
+    :title="action == 'add' ? 'Add User' : 'Edit User'"
     width="40%"
     :before-close="handleClose"
   >
@@ -96,8 +96,8 @@
             :rules="[{ required: true, message: 'Gender is required' }]"
           >
             <el-select v-model="formUser.sex" placeholder="Please select">
-              <el-option label="Male" value="0" />
-              <el-option label="Female" value="1" />
+              <el-option label="Male" value="1" />
+              <el-option label="Female" value="0" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -199,7 +199,7 @@ export default defineComponent({
       //   console.log(res);
       config.total = res.count;
       list.value = res.list.map((item) => {
-        item.sexLabel = item.sex === 0 ? "Female" : "Male";
+        item.sexLabel = item.sex == 0 ? "Female" : "Male";
         return item;
       });
     };
@@ -207,10 +207,9 @@ export default defineComponent({
       config.page = page;
       getUserData(config); // Call the API again, and the data will be updated
     };
-    const formInline = reactive({
+    // Search form data
+    const formInline = reactive({ 
       keyword: "",
-      age: "",
-      sex: "",
     });
     const handleSearch = () => {
       config.name = formInline.keyword;
@@ -266,6 +265,12 @@ export default defineComponent({
             proxy.$refs.userForm.resetFields(); // 重置表单
             getUserData(config); // 更新数据
           }
+        } else {
+          ElMessage({
+            showClose: true,
+            message: "Please fill in the form correctly",
+            type: "error",
+          });
         }
       });
     };
@@ -273,6 +278,26 @@ export default defineComponent({
     const handelCancel = () => {
       dialogVisible.value = false;
       proxy.$refs.userForm.resetFields(); // 重置表单
+    };
+    // 区分编辑和添加用户
+    const action = ref("add");
+    // 新增用户
+    const handleAdd = () => {
+      action.value = "add";
+      dialogVisible.value = true;
+    };
+    // 编辑用户
+    const handleEdit = (row) => {
+      // console.log(row);
+      action.value = "edit";
+      dialogVisible.value = true;
+      row.sex = row.sex == 1 ? "Male" : "Female"; // 性别转换
+      // 这里的proxy是当前实例
+      // proxy.$nextTick的作用是在状态修改后等待dom更新后，再执行回调函数，否则当取消编辑时，表单数据不会重置
+      // https://vuejs.org/guide/essentials/reactivity-fundamentals#dom-update-timing
+      proxy.$nextTick(() => {
+        Object.assign(formUser, row); // 浅拷贝
+      });
     };
     return {
       list,
@@ -286,6 +311,9 @@ export default defineComponent({
       formUser,
       onSubmit,
       handelCancel,
+      action,
+      handleAdd,
+      handleEdit,
     };
   },
 });
