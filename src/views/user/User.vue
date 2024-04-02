@@ -29,7 +29,9 @@
           <el-button type="primary" size="small" @click="handleEdit(scope.row)"
             >Edit</el-button
           >
-          <el-button type="danger" size="small">Delete</el-button>
+          <el-button type="danger" size="small" @click="handelDelete(scope.row)"
+            >Delete</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -149,6 +151,7 @@
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
 import {
   defineComponent,
   getCurrentInstance,
@@ -268,7 +271,7 @@ export default defineComponent({
           } else {
             // 编辑的接口
             // console.log(formUser);
-            formUser.sex = formUser.sex == 'Male' ? 1 : 0; // 根据后端接口要求，转换性别为数字
+            formUser.sex = formUser.sex == "Male" ? 1 : 0; // 根据后端接口要求，转换性别为数字
             let res = await proxy.$api.editUser(formUser);
             if (res) {
               dialogVisible.value = false;
@@ -310,6 +313,26 @@ export default defineComponent({
         Object.assign(formUser, row); // 浅拷贝
       });
     };
+    // 删除用户
+    const handelDelete = (row) => {
+      ElMessageBox.confirm("Are you sure to delete user (" + row.name + ")?")
+        .then(async () => {
+          await proxy.$api.deleteUser({ id: row.id });
+          ElMessage({
+            showClose: true,
+            message: "Delete successfully",
+            type: "success",
+          });
+          getUserData(config); // 更新数据
+        })
+        .catch(() => {
+          // catch error
+        });
+    };
+    // 批量删除用户 - todo
+    const handelDeleteAll = () => {
+      console.log("delete all");
+    };
     return {
       list,
       tableLabel,
@@ -325,6 +348,7 @@ export default defineComponent({
       action,
       handleAdd,
       handleEdit,
+      handelDelete,
     };
   },
 });

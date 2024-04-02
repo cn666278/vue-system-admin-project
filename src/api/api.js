@@ -50,4 +50,12 @@ export default {
       mock: false,
     });
   },
+  deleteUser(params){
+    return request({
+      url: "/user/delete",
+      method: "get", // 因为删除请求不需要传递参数，所以使用get方法
+      data: params,
+      mock: false,
+    });
+  },
 };

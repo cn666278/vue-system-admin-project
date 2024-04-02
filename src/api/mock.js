@@ -8,3 +8,4 @@ Mock.mock('/home/getData', homeApi.getHomeData)
 Mock.mock(/user\/getUser/, 'get', userApi.getUserList) // 使用正则匹配，拦截/user/getUser请求（\是转义字符）
 Mock.mock(/user\/add/, 'post', userApi.createUser)
 Mock.mock(/user\/edit/, 'post', userApi.updateUser)
+Mock.mock(/user\/delete/, 'get', userApi.deleteUser)
