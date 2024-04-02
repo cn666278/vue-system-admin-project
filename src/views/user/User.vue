@@ -208,7 +208,7 @@ export default defineComponent({
       getUserData(config); // Call the API again, and the data will be updated
     };
     // Search form data
-    const formInline = reactive({ 
+    const formInline = reactive({
       keyword: "",
     });
     const handleSearch = () => {
@@ -256,14 +256,25 @@ export default defineComponent({
       // 参照: https://element-plus.org/en-US/component/form.html#form-validation
       proxy.$refs.userForm.validate(async (valid) => {
         if (valid) {
-          formUser.birth = timeFormat(formUser.birth); // 格式化日期
-          let res = await proxy.$api.addUser(formUser);
-          // console.log(res);
-          if (res) {
-            // console.log(proxy)
-            dialogVisible.value = false;
-            proxy.$refs.userForm.resetFields(); // 重置表单
-            getUserData(config); // 更新数据
+          if (action.value == "add") {
+            formUser.birth = timeFormat(formUser.birth); // 格式化日期
+            let res = await proxy.$api.addUser(formUser);
+            if (res) {
+              // console.log(res)
+              dialogVisible.value = false;
+              proxy.$refs.userForm.resetFields(); // 重置表单
+              getUserData(config); // 更新数据
+            }
+          } else {
+            // 编辑的接口
+            // console.log(formUser);
+            formUser.sex = formUser.sex == 'Male' ? 1 : 0; // 根据后端接口要求，转换性别为数字
+            let res = await proxy.$api.editUser(formUser);
+            if (res) {
+              dialogVisible.value = false;
+              proxy.$refs.userForm.resetFields(); // 重置表单
+              getUserData(config); // 更新数据
+            }
           }
         } else {
           ElMessage({
