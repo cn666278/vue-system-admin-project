@@ -272,6 +272,7 @@ export default defineComponent({
             // 编辑的接口
             // console.log(formUser);
             formUser.sex = formUser.sex == "Male" ? 1 : 0; // 根据后端接口要求，转换性别为数字
+            formUser.birth = timeFormat(formUser.birth); // 格式化日期
             let res = await proxy.$api.editUser(formUser);
             if (res) {
               dialogVisible.value = false;
@@ -302,7 +303,7 @@ export default defineComponent({
     };
     // 编辑用户
     const handleEdit = (row) => {
-      // console.log(row);
+      console.log(row);
       action.value = "edit";
       dialogVisible.value = true;
       row.sex = row.sex == 1 ? "Male" : "Female"; // 性别转换
