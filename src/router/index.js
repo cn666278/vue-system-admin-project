@@ -33,6 +33,10 @@ const routes = [
             },
         ]
     },
+    {
+        path: '/login',
+        component: () => import('../views/login/Login.vue')
+    }
 ];
 
 // 创建路由实例 create router instance
