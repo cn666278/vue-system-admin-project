@@ -2,17 +2,44 @@
   <el-form :model="loginForm" class="login-container">
     <h3>System Login</h3>
     <el-form-item>
-      <el-input type="input" placeholder="Please enter name"></el-input>
+      <el-input
+        type="input"
+        placeholder="Please enter name"
+        v-model="loginForm.username"
+      ></el-input>
     </el-form-item>
     <el-form-item>
-      <el-input type="input" placeholder="Please enter name"></el-input>
+      <el-input
+        type="input"
+        placeholder="Please enter password"
+        v-model="loginForm.password"
+      ></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary"> Login </el-button>
+      <el-button type="primary" @click="login"> Login </el-button>
     </el-form-item>
   </el-form>
 </template>
-<script setup lang="ts"></script>
+<script>
+import { getCurrentInstance, reactive } from "vue";
+export default {
+  setup() {
+    const loginForm = reactive({
+      username: "admin",
+      password: "admin",
+    });
+    const { proxy } = getCurrentInstance(); // 解构出proxy，相当于getCurrentInstance().proxy
+    const login = async () => {
+      const res = await proxy.$api.getMenu(loginForm);
+    //   console.log(res);
+    };
+    return {
+      loginForm,
+      login,
+    };
+  },
+};
+</script>
 
 <style lang="less" scoped>
 // scoped的作用是只在当前组件生效，不会影响全局样式。
@@ -30,7 +57,8 @@
     margin-bottom: 20px;
     color: #505450;
   }
-  :deep(.el-form-item__content) { // 因为el-form-item__content是element-ui的样式，所以需要穿透
+  :deep(.el-form-item__content) {
+    // 因为el-form-item__content是element-ui的样式，所以需要穿透
     justify-content: center;
   }
 }

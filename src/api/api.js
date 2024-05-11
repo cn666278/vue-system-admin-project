@@ -58,4 +58,13 @@ export default {
       mock: false,
     });
   },
+  // 根据用户名不同，返回不一样的菜单列表
+  getMenu(prams){
+    return request({
+      url: "/permission/getMenu",
+      method: "post",
+      data: prams,
+      mock: false,
+    });
+  }
 };
