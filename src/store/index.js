@@ -3,6 +3,8 @@ import { createStore } from "vuex";
 // we should use pinia instead of vuex
 // https://pinia.vuejs.org/zh/introduction.html#basic-example
 
+import Cookie from "js-cookie";
+
 // vuex
 export default createStore({
   state: {
@@ -17,6 +19,7 @@ export default createStore({
       },
     ],
     menu: [],
+    token: "",
   },
   mutations: {
     updateIsCollapse(state, payload) {
@@ -80,6 +83,11 @@ export default createStore({
     cleanMenu(state) {
       state.menu = [];
       localStorage.removeItem("menu");
+    },
+    // 路由守卫
+    setToken(state, token) {
+      state.token = token;
+      localStorage.setItem("token", token);
     }
   },
 });
