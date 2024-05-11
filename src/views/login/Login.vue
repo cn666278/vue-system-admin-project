@@ -35,11 +35,12 @@ export default {
     const router = useRouter();
     const login = async () => {
       const res = await proxy.$api.getMenu(loginForm);
-    //   console.log(res);
-    store.commit("setMenu", res.menu);
-    router.push({
-      name: "home",
-    });
+      //   console.log(res);
+      store.commit("setMenu", res.menu);
+      store.commit("addMenu", router);
+      router.push({
+        name: "home",
+      });
     };
     return {
       loginForm,
