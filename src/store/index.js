@@ -76,6 +76,11 @@ export default createStore({
         router.addRoute("home1", item);
       });
     },
+    // 退出登录
+    cleanMenu(state) {
+      state.menu = [];
+      localStorage.removeItem("menu");
+    }
   },
 });
 
