@@ -15,7 +15,8 @@ export default createStore({
                 label: 'home page',
                 icon: 'home'
             }
-        ]
+        ],
+        menu: []
     },
     mutations: {
         updateIsCollapse(state, payload) {
@@ -36,6 +37,10 @@ export default createStore({
         closeTab(state, val){
             let result = state.tabsList.findIndex(item => item.name === val.name); // 根据name查找索引
             state.tabsList.splice(result, 1); // 删除,splice(开始位置, 删除个数)
+        },
+        setMenu(state, val){
+            state.menu = val;
+            localStorage.setItem('menu', JSON.stringify(val));
         }
     }
 });

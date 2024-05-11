@@ -83,16 +83,18 @@ export default {
     const router = useRouter();
 
     const noChildren = () => {
-      return list.filter((item) => {
+      return asyncList.filter((item) => {
         return !item.children;
       });
     };
 
     const hasChildren = () => {
-      return list.filter((item) => {
+      return asyncList.filter((item) => {
         return item.children;
       });
     };
+
+    const asyncList = store.state.menu;
 
     const clickMenu = (item) => {
       router.push({

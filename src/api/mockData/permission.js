@@ -12,8 +12,8 @@ export default {
             {
               path: "/home",
               name: "home",
-              label: "首页",
-              icon: "s-home",
+              label: "home",
+              icon: "house",
               url: "home/index",
             },
             {
