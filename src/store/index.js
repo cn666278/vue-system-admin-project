@@ -40,7 +40,16 @@ export default createStore({
         },
         setMenu(state, val){
             state.menu = val;
-            localStorage.setItem('menu', JSON.stringify(val));
+            localStorage.setItem('menu', JSON.stringify(val)); // 存储到本地, 以便刷新时不丢失
+        },
+        // 添加菜单，用于刷新时不丢失, 从本地存储中获取
+        // 因为vue是单向数据流， 无法数据持久化，所以需要在刷新时重新获取
+        addMenu(state){
+            if(!localStorage.getItem('menu')){ 
+                return;
+            }
+            const menu = JSON.parse(localStorage.getItem('menu')); // 获取本地存储
+            state.menu = menu; 
         }
     }
 });
