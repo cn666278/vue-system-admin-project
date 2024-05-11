@@ -58,20 +58,25 @@ export default createStore({
       state.menu = menu;
 
       const menuArray = [];
+      // 解决路由懒加载问题
+      // https://cloud.tencent.com/developer/article/2160376
+      const modules = import.meta.glob(['../views/*/*.vue','../views/*.vue']); // 动态导入所有的vue文件
 
       // 实现动态路由
       // 遍历menu, 将menu中的children提取出来
-      menu.forEach((item) => {
+      menu.forEach(item => {
         if (item.children) {
           item.children = item.children.map((item) => {
             let url = `../views/${item.url}.vue`;
-            item.component = () => import(url);
+            // item.component = () => import(url)
+            item.component = modules[url];
             return item;
           });
           menuArray.push(...item.children); // 将children添加到menuArray中
         } else {
           let url = `../views/${item.url}.vue`;
-          item.component = () => import(url);
+          // item.component = () => import(url)
+          item.component = modules[url];
           menuArray.push(item);
         }
       });
@@ -82,13 +87,26 @@ export default createStore({
     // 退出登录
     cleanMenu(state) {
       state.menu = [];
+      state.tabsList = [];
       localStorage.removeItem("menu");
+      // fixed bugs: 清除tabsList
+      localStorage.removeItem("tabsList");
     },
     // 路由守卫
-    setToken(state, token) {
-      state.token = token;
-      localStorage.setItem("token", token);
-    }
+    // 设置token
+    setToken(state, val) {
+      state.token = val;
+      Cookie.set("token", val);
+    },
+    // 清除token
+    clearToken(state) {
+      state.token = "";
+      Cookie.remove("token");
+    },
+    // 获取token
+    getToken(state) {
+      state.token = state.token || Cookie.get("token");
+    },
   },
 });
 

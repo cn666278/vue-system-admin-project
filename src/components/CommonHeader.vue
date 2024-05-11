@@ -57,6 +57,7 @@ export default defineComponent({
     // 退出登录
     const handleLogout = () => {
       store.commit("cleanMenu");
+      store.commit("clearToken");
       router.push({
         name: "login",
       });

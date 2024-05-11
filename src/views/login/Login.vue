@@ -38,6 +38,7 @@ export default {
       //   console.log(res);
       store.commit("setMenu", res.menu);
       store.commit("addMenu", router);
+      store.commit("setToken", res.token); // 将token存入vuex,用于路由守卫
       router.push({
         name: "home",
       });
