@@ -30,48 +30,37 @@
   </el-header>
 </template>
 
-<script>
-import { defineComponent, computed } from "vue-demi";
+<script setup>
+import { computed } from "vue-demi";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-export default defineComponent({
-  setup() {
-    let store = useStore();
-    let getImageUrl = (user) => {
-      // console.log(import.meta.url);
-      // console.log(new URL("../assets/images/user.png", import.meta.url));
-      return new URL(`../assets/images/${user}.png`, import.meta.url).href;
-    };
-    // let userImg = require("../assets/images/user.png");
-    let handleCollapse = () => {
-      // 调用vuex中的mutations
-      store.commit("updateIsCollapse");
-    };
-    // 计算属性
-    const current = computed(() => {
-      return store.state.currentMenu;
-    });
 
-    const router = useRouter();
-
-    // 退出登录
-    const handleLogout = () => {
-      store.commit("cleanMenu");
-      store.commit("clearToken");
-      router.push({
-        name: "login",
-      });
-    };
-
-    return {
-      // userImg,
-      getImageUrl,
-      handleCollapse,
-      current,
-      handleLogout,
-    };
-  },
+let store = useStore();
+let getImageUrl = (user) => {
+  // console.log(import.meta.url);
+  // console.log(new URL("../assets/images/user.png", import.meta.url));
+  return new URL(`../assets/images/${user}.png`, import.meta.url).href;
+};
+// let userImg = require("../assets/images/user.png");
+let handleCollapse = () => {
+  // 调用vuex中的mutations
+  store.commit("updateIsCollapse");
+};
+// 计算属性
+const current = computed(() => {
+  return store.state.currentMenu;
 });
+
+const router = useRouter();
+
+// 退出登录
+const handleLogout = () => {
+  store.commit("cleanMenu");
+  store.commit("clearToken");
+  router.push({
+    name: "login",
+  });
+};
 </script>
 
 <style lang="less" scoped>

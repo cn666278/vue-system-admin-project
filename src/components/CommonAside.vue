@@ -43,74 +43,66 @@
   </el-aside>
 </template>
 
-<script>
+<script setup>
 import { useRouter } from "vue-router";
-import { useStore } from 'vuex';
-export default {
-  setup() {
-    const store = useStore();
-    const list = [
-      {
-        path: "/user",
-        name: "user",
-        label: "UserManage",
-        icon: "user",
-        url: "UserManage/UserManage",
-      },
-      {
-        label: "Other",
-        icon: "location",
-        path: "/other",
-        children: [
-          {
-            path: "/page1",
-            name: "page1",
-            label: "Page1",
-            icon: "setting",
-            url: "Other/PageOne",
-          },
-          {
-            path: "/page2",
-            name: "page2",
-            label: "Page2",
-            icon: "setting",
-            url: "Other/PageTwo",
-          },
-        ],
-      },
-    ];
+import { useStore } from "vuex";
 
-    const router = useRouter();
-
-    const noChildren = () => {
-      return asyncList.filter((item) => {
-        return !item.children;
-      });
-    };
-
-    const hasChildren = () => {
-      return asyncList.filter((item) => {
-        return item.children;
-      });
-    };
-
-    const asyncList = store.state.menu;
-
-    const clickMenu = (item) => {
-      router.push({
-        name: item.name,
-      });
-      // vuex来管理当前选中的菜单
-      store.commit("selectMenu", item);
-    };
-
-    return {
-      noChildren,
-      hasChildren,
-      clickMenu,
-    };
+const store = useStore();
+const list = [
+  {
+    path: "/user",
+    name: "user",
+    label: "UserManage",
+    icon: "user",
+    url: "UserManage/UserManage",
   },
+  {
+    label: "Other",
+    icon: "location",
+    path: "/other",
+    children: [
+      {
+        path: "/page1",
+        name: "page1",
+        label: "Page1",
+        icon: "setting",
+        url: "Other/PageOne",
+      },
+      {
+        path: "/page2",
+        name: "page2",
+        label: "Page2",
+        icon: "setting",
+        url: "Other/PageTwo",
+      },
+    ],
+  },
+];
+
+const router = useRouter();
+
+const noChildren = () => {
+  return asyncList.filter((item) => {
+    return !item.children;
+  });
 };
+
+const hasChildren = () => {
+  return asyncList.filter((item) => {
+    return item.children;
+  });
+};
+
+const asyncList = store.state.menu;
+
+const clickMenu = (item) => {
+  router.push({
+    name: item.name,
+  });
+  // vuex来管理当前选中的菜单
+  store.commit("selectMenu", item);
+};
+
 </script>
 
 <style lang="less">
