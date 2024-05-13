@@ -20,34 +20,28 @@
     </el-form-item>
   </el-form>
 </template>
-<script>
+<script setup>
 import { getCurrentInstance, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-export default {
-  setup() {
-    const loginForm = reactive({
-      username: "admin",
-      password: "admin",
-    });
-    const { proxy } = getCurrentInstance(); // 解构出proxy，相当于getCurrentInstance().proxy
-    const store = useStore();
-    const router = useRouter();
-    const login = async () => {
-      const res = await proxy.$api.getMenu(loginForm);
-      //   console.log(res);
-      store.commit("setMenu", res.menu);
-      store.commit("addMenu", router);
-      store.commit("setToken", res.token); // 将token存入vuex,用于路由守卫
-      router.push({
-        name: "home",
-      });
-    };
-    return {
-      loginForm,
-      login,
-    };
-  },
+
+const loginForm = reactive({
+  username: "admin",
+  password: "admin",
+});
+
+const { proxy } = getCurrentInstance(); // 解构出proxy，相当于getCurrentInstance().proxy
+const store = useStore();
+const router = useRouter();
+const login = async () => {
+  const res = await proxy.$api.getMenu(loginForm);
+  //   console.log(res);
+  store.commit("setMenu", res.menu);
+  store.commit("addMenu", router);
+  store.commit("setToken", res.token); // 将token存入vuex,用于路由守卫
+  router.push({
+    name: "home",
+  });
 };
 </script>
 
