@@ -20,7 +20,7 @@ export default {
               path: "/product",
               name: "product",
               label: "Product",
-              icon: "video-play",
+              icon: "Goods",
               url: "product/index",
             },
             {
@@ -32,20 +32,20 @@ export default {
             },
             {
               label: "Other",
-              icon: "location",
+              icon: "Expand",
               children: [
                 {
                   path: "/page1",
                   name: "page1",
                   label: "Page1",
-                  icon: "setting",
+                  icon: "Document",
                   url: "Page1",
                 },
                 {
                   path: "/page2",
                   name: "page2",
                   label: "Page2",
-                  icon: "setting",
+                  icon: "Document",
                   url: "Page2",
                 },
               ],
@@ -71,7 +71,7 @@ export default {
               path: "/product",
               name: "product",
               label: "Product",
-              icon: "video-play",
+              icon: "Goods",
               url: "product/index",
             },
           ],
