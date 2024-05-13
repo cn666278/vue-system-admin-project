@@ -118,4 +118,15 @@ const clickMenu = (item) => {
     text-align: center;
   }
 }
+.el-menu-item{
+  span{
+    margin-left: 5px;
+  }
+}
+
+.el-sub-menu{
+  span{
+    margin-left: 5px;
+  }
+}
 </style>
