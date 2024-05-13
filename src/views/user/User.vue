@@ -350,4 +350,8 @@ const handelDeleteAll = () => {
   display: flex;
   justify-content: space-between;
 }
+
+.el-table__body-wrapper{
+  margin-left: 5px;
+}
 </style>
