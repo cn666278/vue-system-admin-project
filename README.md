@@ -9,3 +9,7 @@
   3.	ApiFox 手写api接口，并配合mock.js进行数据模拟
   4.	使用Echarts绘制数据图（线图，饼图，柱状图）
   5.	导航栏面包屑实现，使用Vuex实现跨组件通信，:deep() !important 实现样式穿透, tab标签路由实现
+  6.	实现数据持久化，刷新页面后，vuex中的数据不会丢失，数据持久化的原理是将数据存储到localStorage中，当页面刷新时，从localStorage中取出数据，再存储到vuex中
+  7.	动态路由，路由守卫
+  8.	使用setup重构项目代码，简化返回
+  9.	添加提示dialog
